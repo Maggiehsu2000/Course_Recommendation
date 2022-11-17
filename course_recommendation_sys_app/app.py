@@ -72,7 +72,7 @@ def main():
 
 	st.title("課程推薦系統")
 
-	menu = ["Home","Recommend","About"]
+	menu = ["Home","Recommend","Introduction","About"]
 	choice = st.sidebar.selectbox("Menu",menu)
 
 	df = load_data("data/udemy_course_data.csv")
@@ -111,6 +111,34 @@ def main():
 					result_df = search_term_if_not_found(search_term,df)
 					st.dataframe(result_df)
 
+	elif choice == "Introduction":
+		st.subheader("課程簡介推薦")
+		cosine_sim_mat = vectorize_text_to_cosine_mat(df['course_title'])
+		search_term = st.text_input("輸入課程相關簡介")
+		num_of_rec = st.sidebar.number_input("Number",4,30,7)
+		if st.button("搜尋"):
+			if search_term is not None:
+				try:
+					results = get_recommendation(search_term,cosine_sim_mat,df,num_of_rec)
+					with st.beta_expander("Results as JSON"):
+						results_json = results.to_dict('index')
+						st.write(results_json)
+
+					for row in results.iterrows():
+						rec_title = row[1][0]
+						rec_score = row[1][1]
+						rec_url = row[1][2]
+						rec_price = row[1][3]
+						rec_num_sub = row[1][4]
+
+						# st.write("Title",rec_title,)
+						stc.html(RESULT_TEMP.format(rec_title,rec_score,rec_url,rec_url,rec_num_sub),height=350)
+				except:
+					results= "未查詢到此課程"
+					st.warning(results)
+					st.info("Suggested Options include")
+					result_df = search_term_if_not_found(search_term,df)
+					st.dataframe(result_df)
 
 
 				# How To Maximize Your Profits Options Trading
