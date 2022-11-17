@@ -53,11 +53,10 @@ RESULT_TEMP = """
 box-shadow:0 0 15px 5px #ccc; background-color: #a8f0c6;
   border-left: 5px solid #6c6c6c;">
 <h4>{}</h4>
-<p style="color:blue;"><span style="color:black;">📈教授:</span>{}</p>
+<p style="color:blue;"><span style="color:black;">📈Source:</span>{}</p>
 <p style="color:blue;"><span style="color:black;">🔗</span><a href="{}",target="_blank">Link</a></p>
-<p style="color:blue;"><span style="color:black;">💲學分數:</span>{}</p>
-<p style="color:blue;"><span style="color:black;">🧑‍🎓👨🏽‍🎓 選別:</span>{}</p>
-<p style="color:blue;"><span style="color:black;">🧑‍🎓時間:</span>{}</p>
+<p style="color:blue;"><span style="color:black;">💲Price:</span>{}</p>
+<p style="color:blue;"><span style="color:black;">👨🏽‍🎓 Student:</span>{}</p>
 
 </div>
 """
@@ -81,7 +80,7 @@ def main():
 	if choice == "Home":
 		st.subheader("Home")
 		st.dataframe(df.head(10))
-
+		st.dataframe(df.info())
 
 	elif choice == "Recommend":
 		st.subheader("課程推薦")
