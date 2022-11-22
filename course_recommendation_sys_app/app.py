@@ -1,10 +1,11 @@
 # Core Pkg
 import streamlit as st 
 import streamlit.components.v1 as stc 
-
+import plotly.express as px
 
 # Load EDA
 import pandas as pd 
+import numpy as np
 from sklearn.feature_extraction.text import CountVectorizer
 from sklearn.metrics.pairwise import cosine_similarity,linear_kernel
 
@@ -143,15 +144,30 @@ def main():
 
 				# How To Maximize Your Profits Options Trading
 
-
-
-
 	else:
 		st.subheader("About")
 		st.text("Built with Streamlit & Pandas")
 
 
+	# 在sidebar生成选择直方或者饼图的选项
+		
+		st.sidebar.markdown("### 課程主題分類")	#小標題
+		select = st.sidebar.selectbox("視覺化類型", ["長條圖", "圓餅圖"],
+									key = "1")	#下拉選單
+		# 整理数据
+		sentiment_count = df["subject"].value_counts() 	#value_counts=多少个不同值
+		sentiment_count = pd.DataFrame({"Sentiment":sentiment_count.index,
+										"Tweets":sentiment_count.values})
+
+		# 如果没有勾选"Hide"则显示图表
+		if not st.sidebar.checkbox("隱藏圖型", True):
+			st.markdown('### 課程主題分類')
+			if select == "長條圖":
+				fig = px.bar(sentiment_count, x = "Sentiment", y = "Tweets", color = "Tweets", height = 500)
+				st.plotly_chart(fig)
+			else:
+				fig = px.pie(sentiment_count, values = "Tweets", names = "Sentiment")
+				st.plotly_chart(fig)
+
 if __name__ == '__main__':
 	main()
-
-
